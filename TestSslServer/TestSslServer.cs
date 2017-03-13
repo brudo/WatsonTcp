@@ -5,22 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 using WatsonTcp;
 
-namespace TestServer
+namespace TestSslServer
 {
-    class TestServer
+    class TestSslServer
     {
         static string serverIp = "";
         static int serverPort = 0;
+        static string certFile = "";
+        static string certPass = "";
 
         static void Main(string[] args)
         {
-            Console.Write("Server IP    : ");
+            Console.Write("Server IP        : ");
             serverIp = Console.ReadLine();
 
-            Console.Write("Server Port  : ");
+            Console.Write("Server Port      : ");
             serverPort = Convert.ToInt32(Console.ReadLine());
 
-            WatsonTcpServer server = new WatsonTcpServer(serverIp, serverPort, ClientConnected, ClientDisconnected, MessageReceived, true);
+            Console.Write("Certificate File : ");
+            certFile = Console.ReadLine();
+
+            Console.Write("Certificate Pass : ");
+            certPass = Console.ReadLine();
+
+            WatsonTcpSslServer server = new WatsonTcpSslServer(serverIp, serverPort, certFile, certPass, true, ClientConnected, ClientDisconnected, MessageReceived, true);
 
             bool runForever = true;
             while (runForever)
@@ -76,7 +84,7 @@ namespace TestServer
                         if (String.IsNullOrEmpty(userInput)) break;
                         server.Send(ipPort, Encoding.UTF8.GetBytes(userInput));
                         break;
-                        
+
                     default:
                         break;
                 }
